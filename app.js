@@ -3,6 +3,8 @@ const pool = require('./src/config/db');
 const AppDataSource = require('./data-source');
 const app = express();
 const parser = require('./parser');
+const generateDetectorFor = require('./generate-detector');
+const getVulnerabilities = require('./get-vulnerabilities');
 
 app.use(express.json());
 
@@ -31,6 +33,16 @@ app.get('/parser', async (req, res) => {
     const exploits = await parser();
     res.json(exploits);
 });
+
+app.get('/vulnerabilities', async (req, res) => {
+    const data = await getVulnerabilities()
+    res.json(data)
+})
+
+app.get('/generate-exploit', async (req, res) => {
+    const data = await generateDetectorFor(req.params.id)
+    res.json(data)
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {
