@@ -5,6 +5,7 @@ const app = express();
 const parser = require('./parser');
 const generateDetectorFor = require('./generate-detector');
 const getVulnerabilities = require('./get-vulnerabilities');
+const analyzeWebsite = require('./analyze-services');
 
 app.use(express.json());
 
@@ -43,6 +44,21 @@ app.get('/generate-exploit', async (req, res) => {
     const data = await generateDetectorFor(req.params.id)
     res.json(data)
 })
+
+app.get('/get-services', async (req, res) => {
+    const domain = req.query.url; // Correct query parameter
+    if (!domain) {
+      return res.status(400).json({ error: 'URL parameter is required' });
+    }
+  
+    try {
+      const data = await analyzeWebsite(domain);
+      res.json(data);
+    } catch (error) {
+      console.error('Ошибка анализа:', error.message);
+      res.status(500).json({ error: 'Ошибка сервера' });
+    }
+  });
 
 const PORT = 3001;
 app.listen(PORT, () => {
