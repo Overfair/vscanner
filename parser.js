@@ -1,6 +1,8 @@
 const puppeteer = require("puppeteer");
+const dataSource = require('./data-source');
+const vulnerability = require("./src/entity/vulnerability.entity");
 
-async function parser(query='exploit') {
+async function parseExploits(query='exploit') {
   let exploits = [];
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
@@ -21,6 +23,36 @@ async function parser(query='exploit') {
   await new Promise(resolve => setTimeout(resolve, 4000));
   await browser.close();
   return exploits;
+}
+
+async function parser() {
+  const exploits = await parseExploits('exploit');
+  await dataSource.getRepository(vulnerability).upsert(
+    exploits.map(expl => ({
+      id: expl.id,
+      title: expl.title,
+      score: expl.score,
+      description: expl.source,
+      href: expl.href,
+      published: new Date(expl.published),
+      type: 'exploit',
+    })),
+    { conflictPaths: ['id'] }
+  );
+  const pocs = await parseExploits('POC');
+  await dataSource.getRepository(vulnerability).upsert(
+    pocs.map(poc => ({
+      id: poc.id,
+      title: poc.title,
+      score: poc.score,
+      description: poc.source,
+      href: poc.href,
+      published: new Date(poc.published),
+      type: 'PoC',
+    })),
+    { conflictPaths: ['id'] }
+  );
+  return { exploits, pocs };
 }
 
 module.exports = parser;

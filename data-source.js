@@ -1,6 +1,6 @@
 const { DataSource } = require("typeorm");
 require("dotenv").config();
-const Vulnerability = require("./src/entity/vulnerability");
+const Vulnerability = require("./src/entity/vulnerability.entity");
 
 const AppDataSource = new DataSource({
     type: "postgres",
