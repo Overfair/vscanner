@@ -6,6 +6,7 @@ const parser = require('./parser');
 const generateDetectorFor = require('./generate-detector');
 const getVulnerabilities = require('./get-vulnerabilities');
 const analyzeWebsite = require('./analyze-services');
+const updateDetectionScript = require('./update-detection-script');
 
 app.use(express.json());
 
@@ -39,6 +40,18 @@ app.get('/vulnerabilities', async (req, res) => {
     const data = await getVulnerabilities()
     res.json(data)
 })
+
+app.post('/update-detection-script', async (req, res) => {
+    const { id, detectionScript } = req.body;
+
+    try {
+        const data = await updateDetectionScript(id, detectionScript);
+        res.json(data);
+    } catch (error) {
+        console.error('Ошибка при обновлении скрипта:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.get('/generate-exploit', async (req, res) => {
     const data = await generateDetectorFor(req.params.id)
