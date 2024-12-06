@@ -1,13 +1,24 @@
 const express = require('express');
 const pool = require('./src/config/db');
+const AppDataSource = require('./data-source');
 const app = express();
 
 app.use(express.json());
 
+AppDataSource.initialize()
+    .then(() => {
+        console.log('Database connected and synchronized');
+    })
+    .catch((error) => {
+        console.error('Database connection error:', error.message);
+    });
+
 // Пример запроса к базе данных
 app.get('/test', async (req, res) => {
     try {
-        const result = await pool.query('SELECT 1 AS result;');
+        const result = await pool.query(
+            "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';"
+        );
         res.json(result.rows);
     } catch (error) {
         console.error('Ошибка выполнения запроса:', error.message);
