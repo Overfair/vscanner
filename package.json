@@ -1,0 +1,23 @@
+{
+  "name": "scanner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "node-html-parser": "^6.1.13",
+    "pg": "^8.13.1",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "eslint": "^9.16.0",
+    "nodemon": "^3.1.7"
+  }
+}
