@@ -2,6 +2,7 @@ const express = require('express');
 const pool = require('./src/config/db');
 const AppDataSource = require('./data-source');
 const app = express();
+const parser = require('./parser');
 
 app.use(express.json());
 
@@ -26,7 +27,12 @@ app.get('/test', async (req, res) => {
     }
 });
 
-const PORT = 3000;
+app.get('/parser', async (req, res) => {
+    const exploits = await parser();
+    res.json(exploits);
+});
+
+const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
