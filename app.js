@@ -102,27 +102,27 @@ app.get('/generate-exploit', async (req, res) => {
 app.get('/get-services', async (req, res) => {
     const domain = req.query.url; // Correct query parameter
     if (!domain) {
-      return res.status(400).json({ error: 'URL parameter is required' });
+        return res.status(400).json({ error: 'URL parameter is required' });
     }
-  
+
     try {
-      const data = await analyzeWebsite(domain);
-      res.json(data);
+        const data = await analyzeWebsite(domain);
+        res.json(data);
     } catch (error) {
-      console.error('Ошибка анализа:', error.message);
-      res.status(500).json({ error: 'Ошибка сервера' });
+        console.error('Ошибка анализа:', error.message);
+        res.status(500).json({ error: 'Ошибка сервера' });
     }
-  });
+});
 
-  app.post('/scan', async (req, res) => {
+app.post('/scan', async (req, res) => {
     try {
-        const scanData = req.body;
+        const { scan_items } = req.body;
 
-        if (!Array.isArray(scanData)) {
+        if (!Array.isArray(scan_items)) {
             return res.status(400).json({ message: "Тело запроса должно содержать массив объектов" });
         }
 
-        const data = await scanAll(scanData);
+        const data = await scanAll(scan_items);
 
         res.json(data);
     } catch (e) {
