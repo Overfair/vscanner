@@ -33,16 +33,13 @@ async function scanAll(scanData) {
     const scanItems = [];
 
     for (const item of scanData) {
-      const scanItemData = {
-        ip: item.ip || null,
-        domain: item.domain || null,
-        vulnerabilities: item.vulnerabilities,
-        scan: newScan,
-        startedAt: new Date(),
-      };
-
       const createdItem = await scanItemRepository.save(
-        scanItemRepository.create(scanItemData)
+        scanItemRepository.create({
+          ip: item.ip || null,
+          domain: item.domain || null,
+          vulnerabilities: item.vulnerabilities,
+          scan_id: newScan.id,
+        })
       );
       scanItems.push(createdItem);
     }

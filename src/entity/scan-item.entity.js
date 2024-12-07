@@ -45,12 +45,19 @@ module.exports = new EntitySchema({
             type: "simple-array",
             nullable: true,
         },
+        scan_id: {
+            type: "uuid",
+            nullable: true,
+        },
     },
     relations: {
         scan: {
-            target: "Scan",
+            target: "Scan", 
             type: "many-to-one",
-            joinColumn: true,
+            joinColumn: {
+                name: "scan_id"
+            },
+            eager: true
         },
     },
 });
