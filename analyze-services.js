@@ -23,7 +23,7 @@ Return the result as a JSON object with no additional text, formatting, or code 
 
 Example output:
 {
-  "services": ["React", "Next.js", "Bootstrap", "Google Analytics", "Vue.js", "jQuery", "Laravel", "Express.js", "Django", "Flask", "Ruby on Rails", "Spring", "Express", "ASP.NET", "Node.js", "Socket.IO", "WebRTC", "WebGL", "WebAssembly", "Service Workers", "WebP", "AVIF", "WebP2", "WebP3", "WebP4", "WebP5", "WebP6", "WebP7", "WebP8", "WebP9", "WebP10"]
+  "services": ["React", "Next.js", "Bootstrap", "Google Analytics", "Vue.js", "jQuery", "Laravel", "Express.js", "Django", "Flask", "Ruby on Rails", "Spring", "Express", "ASP.NET", "Node.js", "Socket.IO", "WebRTC", "WebGL", "WebAssembly", "GPON", "Dlink", "TP-Link", "Netgear", "Linksys", "Xiaomi", "Huawei", "Zyxel", "DrayTek", "Sagemcom", "Sagem", "ZyXEL", "Sagem", "ZyXEL", "Sagem", "ZyXEL", "Sagem", "ZyXEL", "Sagem", "ZyXEL"]
 }
 
 HTML content of the webpage is provided below. Analyze it carefully.
@@ -35,6 +35,7 @@ HTML content of the webpage is provided below. Analyze it carefully.
     console.log(`Analyzing services for: ${url} (IP: ${ip})`);
 
     const { data: html } = await axios.get(url);
+    console.log(html);
 
     const client = new openai({ apiKey: process.env.OPENAI_API_KEY });
 
