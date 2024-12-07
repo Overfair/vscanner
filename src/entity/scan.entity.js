@@ -35,10 +35,6 @@ module.exports = new EntitySchema({
             type: "uuid",
             nullable: true,
         },
-        vulnerabilities: {
-            type: "simple-array",
-            nullable: true,
-        },
     },
     relations: {
         botToken: {

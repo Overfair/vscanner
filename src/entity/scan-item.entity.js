@@ -40,7 +40,11 @@ module.exports = new EntitySchema({
         failedExploits: {
             type: "json",
             nullable: true
-        }
+        },
+        vulnerabilities: {
+            type: "simple-array",
+            nullable: true,
+        },
     },
     relations: {
         scan: {
