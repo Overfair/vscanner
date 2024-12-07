@@ -7,6 +7,7 @@ const generateDetectorFor = require('./generate-detector');
 const getVulnerabilities = require('./get-vulnerabilities');
 const analyzeWebsite = require('./analyze-services');
 const updateDetectionScript = require('./update-detection-script');
+const generateToken = require("./generate-token");
 
 app.use(express.json());
 
@@ -31,6 +32,18 @@ app.get('/test', async (req, res) => {
     }
 });
 
+app.post('/generate-token', async (req, res) => {
+    const { botName } = req.body;
+
+    try {
+        const data = await generateToken(botName);
+        res.json(data);
+    } catch (error) {
+        console.error('Ошибка при создании токена:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.get('/parser', async (req, res) => {
     const exploits = await parser();
     res.json(exploits);
@@ -39,7 +52,7 @@ app.get('/parser', async (req, res) => {
 app.get('/vulnerabilities', async (req, res) => {
     const data = await getVulnerabilities()
     res.json(data)
-})
+});
 
 app.post('/update-detection-script', async (req, res) => {
     const { id, detectionScript } = req.body;

@@ -30,12 +30,12 @@ module.exports = new EntitySchema({
             type: "boolean",
             default: true,
         },
-        relations: {
-            scans: {
-                target: "Scan",
-                type: "one-to-many",
-                inverseSide: "botToken",
-            },
+    },
+    relations: {
+        scans: {
+            target: "Scan",
+            type: "one-to-many",
+            inverseSide: "botToken",
         },
     },
 });
