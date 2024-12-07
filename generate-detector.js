@@ -121,4 +121,4 @@ async function generateDetectorFor(id) {
     return detectorData;
 }
 
-module.exports = generateDetectorFor
+module.exports = generateDetector

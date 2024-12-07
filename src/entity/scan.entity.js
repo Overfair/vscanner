@@ -19,6 +19,10 @@ module.exports = new EntitySchema({
             type: "timestamp",
             nullable: true,
         },
+        failMessage: {
+            type: "char varying",
+            nullable: true,
+        },
         completedAt: {
             type: "timestamp",
             nullable: true,

@@ -1,6 +1,7 @@
 const puppeteer = require("puppeteer");
 const dataSource = require('./data-source');
 const vulnerability = require("./src/entity/vulnerability.entity");
+const generateDetector = require("./generate-detector");
 
 async function parseExploits(query='exploit') {
   let exploits = [];
@@ -25,33 +26,33 @@ async function parseExploits(query='exploit') {
   return exploits;
 }
 
+async function generateDetectorAndSave(exploits, type) {
+  const items = []
+  for (const exploit of exploits) {
+    const detectResponse = await generateDetector(exploit.source)
+    items.push(await dataSource.getRepository(vulnerability).upsert({
+      id: exploit.id,
+      title: exploit.title,
+      score: exploit.score,
+      description: exploit.source,
+      href: exploit.href,
+      published: new Date(exploit.published),
+      detectionScript: detectResponse.detect,
+      contentType: detectResponse.forContentType,
+      technologiesUsed: detectResponse.technologiesUsed,
+      type,
+    }, { conflictPaths: ['id'] }))
+  }
+  return items
+}
+
 async function parser() {
   const exploits = await parseExploits('exploit');
-  await dataSource.getRepository(vulnerability).upsert(
-    exploits.map(expl => ({
-      id: expl.id,
-      title: expl.title,
-      score: expl.score,
-      description: expl.source,
-      href: expl.href,
-      published: new Date(expl.published),
-      type: 'exploit',
-    })),
-    { conflictPaths: ['id'] }
-  );
+  await generateDetectorAndSave(exploits, 'exploit')
+
   const pocs = await parseExploits('POC');
-  await dataSource.getRepository(vulnerability).upsert(
-    pocs.map(poc => ({
-      id: poc.id,
-      title: poc.title,
-      score: poc.score,
-      description: poc.source,
-      href: poc.href,
-      published: new Date(poc.published),
-      type: 'PoC',
-    })),
-    { conflictPaths: ['id'] }
-  );
+  await generateDetectorAndSave(pocs, 'PoC')
+
   return { exploits, pocs };
 }
 

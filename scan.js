@@ -1,7 +1,8 @@
+const axios = require('axios')
+const net = require("net");
 const scanItem = require("./src/entity/scan-item.entity");
 const scan = require("./src/entity/scan.entity");
 const dataSource = require("./data-source");
-const net = require("net");
 
 const DEFAULT_PORTS = [80, 443, 8080, 8443];
 
@@ -31,9 +32,15 @@ function checkPort(ip, port) {
 
 function checkDomain(domain) {
   return new Promise((resolve) => {
-    fetch(`http://${domain}`)
+    axios.get(`http://${domain}`)
       .then(() => resolve(true))
-      .catch(() => resolve(false));
+      .catch((e) => {
+        if (e.response) {
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      });
   });
 }
 
@@ -104,6 +111,8 @@ async function scanAll(ips, domains) {
       );
       scanItems.push(item);
     }
+
+    await axios.get(`https://xec2e00cgl.execute-api.us-east-1.amazonaws.com/scan_id=${scan.id}`)
 
     await queryRunner.commitTransaction();
 

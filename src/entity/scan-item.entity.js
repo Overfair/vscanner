@@ -29,7 +29,7 @@ module.exports = new EntitySchema({
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
         },
-        scannedExploits: {
+        passedExploits: {
             type: "int",
             default: 0,
         },
@@ -37,6 +37,10 @@ module.exports = new EntitySchema({
             type: "simple-array",
             nullable: true,
         },
+        failedExploits: {
+            type: "json",
+            nullable: true
+        }
     },
     relations: {
         scan: {

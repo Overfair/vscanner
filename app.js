@@ -112,8 +112,12 @@ app.get('/get-services', async (req, res) => {
 
 app.post('/scan', async (req, res) => {
     const { ips, domains } = req.body;
-    const data = await scan(ips, domains);
-    res.json(data);
+    try {
+        const data = await scan(ips, domains);
+        res.json(data);
+    } catch(e) {
+        res.status(500).send({ message: e.message })
+    }
 });
 
 const PORT = 3001;
