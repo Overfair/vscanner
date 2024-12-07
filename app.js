@@ -8,6 +8,7 @@ const getVulnerabilities = require('./get-vulnerabilities');
 const analyzeWebsite = require('./analyze-services');
 const updateDetectionScript = require('./update-detection-script');
 const generateToken = require("./generate-token");
+const scan = require('./scan');
 
 app.use(express.json());
 
@@ -85,6 +86,12 @@ app.get('/get-services', async (req, res) => {
       res.status(500).json({ error: 'Ошибка сервера' });
     }
   });
+
+app.post('/scan', async (req, res) => {
+    const { ips, domains } = req.body;
+    const data = await scan(ips, domains);
+    res.json(data);
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {

@@ -31,19 +31,23 @@ cd CVE-2024-10924-Wordpress-Docker
 docker compose up --build
 
 Example Output:
+const axios = require('axios');
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
+
 async function detect(url) {
     try {
         // Remove trailing slash if present
         url = url.replace(/\/$/, '');
-        
+
         // Check if WordPress is running by checking wp-json endpoint
-        const wpCheck = await fetch(\${url}/wp-json);
+        const wpCheck = await axios.get(\${url}/wp-json);
         if (!wpCheck.ok) {
             return false; // Not a WordPress site
         }
 
         // Check if Really Simple Security plugin is installed by checking its REST API endpoint
-        const rssCheck = await fetch(\${url}/wp-json/really-simple-security/v1/version);
+        const rssCheck = await axios.get(\${url}/wp-json/really-simple-security/v1/version);
         if (!rssCheck.ok) {
             return false; // Plugin not installed
         }
@@ -74,6 +78,8 @@ async function detect(url) {
         return false;
     }
 }
+
+module.exports = detect;
 
 RESPOND ONLY in Following json Format {
 "detect": "",
