@@ -64,11 +64,6 @@ app.get('/scans', async (req, res) => {
 
 app.get("/vulnerabilities/search", async (req, res) => {
     const { query } = req.query;
-
-    if (!query || query.trim() === "") {
-        return res.status(400).json({ error: "Обязательное поле: query" });
-    }
-
     try {
         const results = await searchVulnerabilities(query);
         res.json(results);
