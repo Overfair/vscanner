@@ -101,6 +101,7 @@ app.get('/generate-exploit', async (req, res) => {
 
 app.get('/get-services', async (req, res) => {
     const domain = req.query.url; // Correct query parameter
+
     if (!domain) {
         return res.status(400).json({ error: 'URL parameter is required' });
     }
