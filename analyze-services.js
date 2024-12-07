@@ -14,23 +14,19 @@ async function resolveDomainToIP(domain) {
 async function analyzeWebsite(domain) {
   console.log({ domain });
   const SYSTEM_PROMPT = `
-  You are a web analyst AI. Your task is to analyze the HTML content of a webpage and identify the services and technologies used on the website.
+  You are a web analyst AI. Your task is to analyze the HTML content of a webpage and return a structured list of services and technologies used on the website.
 
-  Provide a structured JSON output containing:
-  1. A list of JavaScript files loaded on the page (full URLs).
-  2. A list of CSS files loaded on the page (full URLs).
-  3. Key meta tag content values.
-  
-  Return the result as a pure JSON object with no additional text, formatting, or code block markers.
-  
-  Example output:
-  {
-    "scripts": ["https://example.com/script1.js", "https://cdn.example.com/lib.js"],
-    "stylesheets": ["https://example.com/style.css", "https://cdn.example.com/theme.css"],
-    "meta": ["Description: Example website", "Author: John Doe"]
-  }
-  
-  HTML content of the webpage is provided below. Analyze it carefully.
+Provide a JSON output containing:
+1. "services": A list of detected JavaScript libraries, frameworks, third-party tools, and meta information indicating the site's technologies.
+
+Return the result as a JSON object with no additional text, formatting, or code block markers.
+
+Example output:
+{
+  "services": ["React", "Next.js", "Bootstrap", "Google Analytics"]
+}
+
+HTML content of the webpage is provided below. Analyze it carefully.
 `;
 
   try {
