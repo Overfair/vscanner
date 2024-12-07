@@ -11,6 +11,14 @@ const generateToken = require("./generate-token");
 const getScans = require('./get-scans');
 const searchVulnerabilities = require("./search-vulnerabilities");
 const scan = require('./scan');
+const cors = require('cors');
+
+// Enable CORS for all routes
+app.use(cors({
+    origin: '*', // Allow all origins - customize this in production
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
 
@@ -64,11 +72,6 @@ app.get('/scans', async (req, res) => {
 
 app.get("/vulnerabilities/search", async (req, res) => {
     const { query } = req.query;
-
-    if (!query || query.trim() === "") {
-        return res.status(400).json({ error: "Обязательное поле: query" });
-    }
-
     try {
         const results = await searchVulnerabilities(query);
         res.json(results);
