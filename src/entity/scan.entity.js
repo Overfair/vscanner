@@ -41,13 +41,13 @@ module.exports = new EntitySchema({
         },
     },
     relations: {
-        botToken: {
+        bot_token: {
             target: "BotToken",
             type: "many-to-one",
             joinColumn: true,
             eager: true,
         },
-        scanItems: {
+        scan_items: {
             target: "ScanItem",
             type: "one-to-many",
             inverseSide: "scan",
