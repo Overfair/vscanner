@@ -47,13 +47,16 @@ async function generateDetectorAndSave(exploits, type) {
 }
 
 async function parser() {
-  const exploits = await parseExploits('exploit');
+  const exploits = await parseExploits('GPON');
   await generateDetectorAndSave(exploits, 'exploit')
+  return exploits
+  // const exploits = await parseExploits('exploit');
+  // await generateDetectorAndSave(exploits, 'exploit')
 
-  const pocs = await parseExploits('POC');
-  await generateDetectorAndSave(pocs, 'PoC')
+  // const pocs = await parseExploits('POC');
+  // await generateDetectorAndSave(pocs, 'PoC')
 
-  return { exploits, pocs };
+  // return { exploits, pocs };
 }
 
 module.exports = parser;
