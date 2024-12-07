@@ -8,6 +8,8 @@ const getVulnerabilities = require('./get-vulnerabilities');
 const analyzeWebsite = require('./analyze-services');
 const updateDetectionScript = require('./update-detection-script');
 const generateToken = require("./generate-token");
+const getScans = require('./get-scans');
+const searchVulnerabilities = require("./search-vulnerabilities");
 
 app.use(express.json());
 
@@ -52,6 +54,27 @@ app.get('/parser', async (req, res) => {
 app.get('/vulnerabilities', async (req, res) => {
     const data = await getVulnerabilities()
     res.json(data)
+});
+
+app.get('/scans', async (req, res) => {
+    const data = await getScans()
+    res.json(data)
+});
+
+app.get("/vulnerabilities/search", async (req, res) => {
+    const { query } = req.query;
+
+    if (!query || query.trim() === "") {
+        return res.status(400).json({ error: "Обязательное поле: query" });
+    }
+
+    try {
+        const results = await searchVulnerabilities(query);
+        res.json(results);
+    } catch (error) {
+        console.error("Ошибка:", error.message);
+        res.status(500).json({ error: "Ошибка при поиске уязвимостей" });
+    }
 });
 
 app.post('/update-detection-script', async (req, res) => {

@@ -27,6 +27,14 @@ module.exports = new EntitySchema({
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
         },
+        botTokenId: {
+            type: "uuid",
+            nullable: true,
+        },
+        vulnerabilities: {
+            type: "simple-array",
+            nullable: true,
+        },
     },
     relations: {
         botToken: {
