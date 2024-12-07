@@ -71,9 +71,9 @@ app.get('/scans', async (req, res) => {
 });
 
 app.get("/vulnerabilities/search", async (req, res) => {
-    const { query } = req.query;
+    const { query, query2, query3, query4 } = req.query;
     try {
-        const results = await searchVulnerabilities(query);
+        const results = await searchVulnerabilities(query, query2, query3, query4);
         res.json(results);
     } catch (error) {
         console.error("Ошибка:", error.message);
