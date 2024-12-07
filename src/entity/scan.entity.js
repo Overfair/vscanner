@@ -20,7 +20,7 @@ module.exports = new EntitySchema({
             nullable: true,
         },
         failMessage: {
-            type: "char varying",
+            type: "varchar",
             nullable: true,
         },
         completedAt: {
