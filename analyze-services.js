@@ -1,63 +1,62 @@
+const openai = require('openai');
 const axios = require('axios');
-const cheerio = require('cheerio');
-const dns = require('dns').promises; // Using promises for cleaner async/await syntax
+const dns = require('dns').promises;
 
 async function resolveDomainToIP(domain) {
   try {
     const address = await dns.lookup(domain);
-    return address.address; // Extract the IP address
+    return address.address;
   } catch (err) {
     throw new Error(`Ошибка при разрешении домена ${domain}: ${err.message}`);
   }
 }
 
 async function analyzeWebsite(domain) {
+  console.log({ domain });
+  const SYSTEM_PROMPT = `
+  You are a web analyst AI. Your task is to analyze the HTML content of a webpage and identify the services and technologies used on the website.
+
+  Provide a structured JSON output containing:
+  1. A list of JavaScript files loaded on the page (full URLs).
+  2. A list of CSS files loaded on the page (full URLs).
+  3. Key meta tag content values.
+  
+  Return the result as a pure JSON object with no additional text, formatting, or code block markers.
+  
+  Example output:
+  {
+    "scripts": ["https://example.com/script1.js", "https://cdn.example.com/lib.js"],
+    "stylesheets": ["https://example.com/style.css", "https://cdn.example.com/theme.css"],
+    "meta": ["Description: Example website", "Author: John Doe"]
+  }
+  
+  HTML content of the webpage is provided below. Analyze it carefully.
+`;
+
   try {
-    // Check if the domain is valid
-    if (!domain || typeof domain !== 'string') {
-      throw new Error('Некорректный домен. Укажите правильный домен.');
-    }
-
-    // Resolve the domain to its IP address
     const ip = await resolveDomainToIP(domain);
+    const url = `https://${domain}`;
+    console.log(`Analyzing services for: ${url} (IP: ${ip})`);
 
-    // Form a URL using HTTPS (most modern sites require HTTPS)
-    const url = `https://${domain}`; // Use the original domain in the URL
-    console.log(`Анализ сайта через домен: ${url} (IP: ${ip})`);
+    const { data: html } = await axios.get(url);
 
-    // Fetch the website's HTML
-    const { data } = await axios.get(url, {
-      headers: {
-        Host: domain, // Ensure the Host header matches the domain
-      },
+    const client = new openai({ apiKey: process.env.OPENAI_API_KEY });
+
+    const completion = await client.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `HTML content:\n${html}` },
+      ],
+      temperature: 0.7,
+      max_tokens: 5000,
     });
 
-    // Load HTML using Cheerio
-    const $ = cheerio.load(data);
-
-    // Array to store detected services
-    const services = [];
-
-    // Find scripts and stylesheets
-    $('script[src], link[rel="stylesheet"]').each((index, element) => {
-      const src = $(element).attr('src') || $(element).attr('href');
-      if (src) {
-        services.push(src.startsWith('http') ? src : `${url}${src}`);
-      }
-    });
-
-    // Find meta tags
-    $('meta').each((index, element) => {
-      const content = $(element).attr('content');
-      if (content) {
-        services.push(content);
-      }
-    });
-
+    const services = JSON.parse(completion.choices[0].message.content);
     return services;
   } catch (error) {
-    console.error(`Ошибка при анализе сайта ${domain}: ${error.message}`);
-    return { error: `Ошибка: ${error.message}` };
+    console.error(`Ошибка при анализе ${domain}: ${error.message}`);
+    return { error: `Не удалось проанализировать: ${error.message}` };
   }
 }
 
