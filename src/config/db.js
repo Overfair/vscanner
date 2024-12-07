@@ -10,6 +10,8 @@ const pool = new Pool({
 
 // Проверка подключения
 pool.connect((err) => {
+    // pool.query("DELETE FROM scans WHERE true")
+    // pool.query("DELETE FROM scan_items WHERE true")
     if (err) {
         console.error('Ошибка подключения к PostgreSQL:', err.message);
     } else {

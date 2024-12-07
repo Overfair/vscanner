@@ -15,23 +15,23 @@ module.exports = new EntitySchema({
         domains: {
             type: "simple-array",
         },
-        startedAt: {
+        started_at: {
             type: "timestamp",
             nullable: true,
         },
-        failMessage: {
+        fail_message: {
             type: "varchar",
             nullable: true,
         },
-        completedAt: {
+        completed_at: {
             type: "timestamp",
             nullable: true,
         },
-        createdAt: {
+        created_at: {
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
         },
-        botTokenId: {
+        bot_token_id: {
             type: "uuid",
             nullable: true,
         },

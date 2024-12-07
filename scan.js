@@ -24,7 +24,6 @@ async function scanAll(scanData) {
       scanRepository.create({
         ips,
         domains,
-        startedAt: new Date(),
       })
     );
 

@@ -17,27 +17,27 @@ module.exports = new EntitySchema({
             type: "varchar",
             nullable: true,
         },
-        startedAt: {
+        started_at: {
             type: "timestamp",
             nullable: true,
         },
-        completedAt: {
+        completed_at: {
             type: "timestamp",
             nullable: true,
         },
-        createdAt: {
+        created_at: {
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
         },
-        passedExploits: {
+        passed_exploits: {
             type: "int",
             default: 0,
         },
-        foundExploits: {
+        found_exploits: {
             type: "simple-array",
             nullable: true,
         },
-        failedExploits: {
+        failed_exploits: {
             type: "json",
             nullable: true
         },

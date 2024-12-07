@@ -8,7 +8,7 @@ async function getScans() {
       scan_items: true
     },
     order: {
-      createdAt: 'DESC'
+      created_at: 'DESC'
     }
   });
   return scans;
