@@ -47,7 +47,7 @@ async function generateDetectorAndSave(exploits, type) {
 }
 
 async function parser() {
-  const exploits = await parseExploits('GPON');
+  const exploits = await parseExploits('wordpress');
   await generateDetectorAndSave(exploits, 'exploit')
   return exploits
   // const exploits = await parseExploits('exploit');
