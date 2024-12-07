@@ -31,7 +31,7 @@ HTML content of the webpage is provided below. Analyze it carefully.
 
   try {
     const ip = await resolveDomainToIP(domain);
-    const url = `https://${domain}`;
+    const url = `http://${domain}`;
     console.log(`Analyzing services for: ${url} (IP: ${ip})`);
 
     const { data: html } = await axios.get(url);
