@@ -12,6 +12,7 @@ const getScans = require('./get-scans');
 const searchVulnerabilities = require("./search-vulnerabilities");
 const scan = require('./scan');
 const cors = require('cors');
+const scanAll = require('./scan');
 
 // Enable CORS for all routes
 app.use(cors({
@@ -113,13 +114,20 @@ app.get('/get-services', async (req, res) => {
     }
   });
 
-app.post('/scan', async (req, res) => {
-    const { ips, domains } = req.body;
+  app.post('/scan', async (req, res) => {
     try {
-        const data = await scan(ips, domains);
+        const scanData = req.body;
+
+        if (!Array.isArray(scanData)) {
+            return res.status(400).json({ message: "Тело запроса должно содержать массив объектов" });
+        }
+
+        const data = await scanAll(scanData);
+
         res.json(data);
-    } catch(e) {
-        res.status(500).send({ message: e.message })
+    } catch (e) {
+        console.error("Ошибка:", e.message);
+        res.status(500).send({ message: e.message });
     }
 });
 
