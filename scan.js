@@ -43,7 +43,7 @@ async function scanAll(scanData) {
       scanItems.push(createdItem);
     }
 
-    await axios.get(`https://xec2e00cgl.execute-api.us-east-1.amazonaws.com/scan_id=${newScan.id}`);
+    axios.get(`https://xec2e00cgl.execute-api.us-east-1.amazonaws.com/scan_id=${newScan.id}`);
 
     await queryRunner.commitTransaction();
 
