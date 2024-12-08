@@ -109,6 +109,7 @@ async function generateDetector(exploitText) {
 
 async function generateDetectorFor(id) {
     const v = await dataSource.getRepository(vulnerability).findOneByOrFail({ id });
+
     const detectorData = await generateDetector(v.description);
     
     await dataSource.getRepository(vulnerability).save({
@@ -121,4 +122,4 @@ async function generateDetectorFor(id) {
     return detectorData;
 }
 
-module.exports = generateDetector
+module.exports = generateDetectorFor
