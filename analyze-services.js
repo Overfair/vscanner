@@ -28,10 +28,9 @@ Example output:
 
 HTML content of the webpage is provided below. Analyze it carefully.
 `;
-
+  const url = domain.startsWith('http') ? domain : `http://${domain}`;
   try {
     const ip = await resolveDomainToIP(domain);
-    const url = domain.startsWith('http') ? domain : `http://${domain}`;
     console.log(`Analyzing services for: ${url} (IP: ${ip})`);
 
     const { data: html } = await axios.get(url);
