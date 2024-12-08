@@ -1,15 +1,23 @@
 const dataSource = require("./data-source");
 const scan = require("./src/entity/scan.entity");
 const scanItem = require("./src/entity/scan-item.entity");
+const botToken = require("./src/entity/bot-token.entity");
 const axios = require('axios');
 
-async function scanAll(scanData) {
+async function scanAll(scanData, botTokenHeader) {
   const queryRunner = dataSource.createQueryRunner();
   await queryRunner.connect();
   await queryRunner.startTransaction();
   console.log("scanData received:", scanData);
 
   try {
+    // Проверяем токен
+    const botTokenRepository = dataSource.getRepository(botToken);
+    const validToken = await botTokenRepository.findOne({ where: { token: botTokenHeader, isActive: true } });
+    if (!validToken) {
+      throw new Error("Токен не существует, либо деактивирован");
+    }
+
     // Разделяем IP и домены
     const ips = scanData
       .filter((item) => item.ip && !item.domain)

@@ -8,8 +8,8 @@ const analyzeWebsite = require('./analyze-services');
 const updateDetectionScript = require('./update-detection-script');
 const generateToken = require("./generate-token");
 const getScans = require('./get-scans');
+const getTokens = require('./get-tokens');
 const searchVulnerabilities = require("./search-vulnerabilities");
-const scan = require('./scan');
 const cors = require('cors');
 const scanAll = require('./scan');
 
@@ -47,13 +47,18 @@ app.get('/parser', async (req, res) => {
     res.json(exploits);
 });
 
-app.get('/vulnerabilities', async (req, res) => {
+app.get('/api/v1/vulnerabilities', async (req, res) => {
     const data = await getVulnerabilities()
     res.json(data)
 });
 
 app.get('/scans', async (req, res) => {
     const data = await getScans()
+    res.json(data)
+});
+
+app.get('/tokens', async (req, res) => {
+    const data = await getTokens()
     res.json(data)
 });
 
@@ -101,15 +106,19 @@ app.get('/get-services', async (req, res) => {
     }
 });
 
-app.post('/scan', async (req, res) => {
+app.post('/api/v1/scan', async (req, res) => {
     try {
-        const { scan_items } = req.body;
+        const botTokenHeader = req.headers["bot-token"];
+        if (!botTokenHeader) {
+            return res.status(401).json({ message: "Отсутсвует токен" });
+        }
+            const { scan_items } = req.body;
 
         if (!Array.isArray(scan_items)) {
             return res.status(400).json({ message: "Тело запроса должно содержать массив объектов" });
         }
 
-        const data = await scanAll(scan_items);
+        const data = await scanAll(scan_items, botTokenHeader);
 
         res.json(data);
     } catch (e) {
