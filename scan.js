@@ -14,8 +14,13 @@ async function scanAll(scanData, botTokenHeader) {
     // Проверяем токен
     const botTokenRepository = dataSource.getRepository(botToken);
     const validToken = await botTokenRepository.findOne({ where: { token: botTokenHeader, isActive: true } });
+    
     if (!validToken) {
       throw new Error("Токен не существует, либо деактивирован");
+    }
+
+    if (validToken.expiresAt && new Date(validToken.expiresAt) < new Date()) {
+      throw new Error("Просроченный токен");
     }
 
     // Разделяем IP и домены
