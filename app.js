@@ -102,7 +102,7 @@ app.get('/get-services', async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error('Ошибка анализа:', error.message);
-        res.status(500).json({ error: 'Ошибка сервера' });
+        res.status(500).json({ error: `Ошибка сервера: ${error.message}` });
     }
 });
 
