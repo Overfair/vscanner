@@ -19,7 +19,7 @@ const swaggerSpec = require('./swagger');
 app.use(cors({
     origin: '*', // Allow all origins - customize this in production
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'bot-token']
 }));
 
 app.use(express.json());

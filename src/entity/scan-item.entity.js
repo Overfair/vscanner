@@ -34,7 +34,7 @@ module.exports = new EntitySchema({
             default: 0,
         },
         found_exploits: {
-            type: "simple-array",
+            type: "json",
             nullable: true,
         },
         failed_exploits: {
