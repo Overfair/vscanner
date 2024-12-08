@@ -56,7 +56,10 @@ async function scanAll(scanData, botTokenHeader) {
       scanItems.push(createdItem);
     }
 
-    axios.get(`https://xec2e00cgl.execute-api.us-east-1.amazonaws.com/scan_id=${newScan.id}`);
+    axios.get(`https://xec2e00cgl.execute-api.us-east-1.amazonaws.com/scan_id=${newScan.id}`)
+      .catch(e => {
+        console.log('Lambda Scan Error:', e.message)
+      })
 
     await queryRunner.commitTransaction();
 
