@@ -53,7 +53,7 @@ HTML content of the webpage is provided below. Analyze it carefully.
     const services = JSON.parse(completion.choices[0].message.content);
     return services;
   } catch (error) {
-    console.error(`Ошибка при анализе ${domain}: ${error.message}`);
+    console.error(`Ошибка при анализе ${url}: ${error.message}`);
     return { error: `Не удалось проанализировать: ${error.message}` };
   }
 }
