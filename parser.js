@@ -3,6 +3,12 @@ const dataSource = require('./data-source');
 const vulnerability = require("./src/entity/vulnerability.entity");
 const generateDetector = require("./generate-detector");
 
+const browser = await puppeteer.launch({
+  executablePath: '/usr/bin/chromium-browser',
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'], // Important for Render.com
+});
+
 async function parseExploits(query='exploit') {
   let exploits = [];
   const browser = await puppeteer.launch({ headless: false });
