@@ -2,15 +2,6 @@ const openai = require('openai');
 const axios = require('axios');
 const dns = require('dns').promises;
 
-async function resolveDomainToIP(domain) {
-  try {
-    const address = await dns.lookup(domain);
-    return address.address;
-  } catch (err) {
-    throw new Error(`Ошибка при разрешении домена ${domain}: ${err.message}`);
-  }
-}
-
 async function analyzeWebsite(domain) {
   console.log({ domain });
   const SYSTEM_PROMPT = `
@@ -30,9 +21,6 @@ HTML content of the webpage is provided below. Analyze it carefully.
 `;
   const url = domain.startsWith('http') ? domain : `http://${domain}`;
   try {
-    const ip = await resolveDomainToIP(domain);
-    console.log(`Analyzing services for: ${url} (IP: ${ip})`);
-
     const { data: html } = await axios.get(url);
     console.log(html);
 
